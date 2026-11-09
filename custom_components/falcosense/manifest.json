@@ -1,15 +1,14 @@
 {
   "domain": "falcosense",
   "name": "FalcoSENSE",
-  "version": "0.1.4",
   "codeowners": [
     "@markus-becker-tridonic-com"
   ],
   "config_flow": true,
   "documentation": "https://github.com/tridonic-com/hacs-falcosense",
-  "issue_tracker": "https://github.com/tridonic-com/hacs-falcosense/issues",
   "integration_type": "device",
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/tridonic-com/hacs-falcosense/issues",
   "loggers": [
     "falcosense",
     "aiomqtt"
@@ -18,5 +17,6 @@
   "requirements": [
     "falcosense==0.1.0",
     "Pillow>=12.3.0"
-  ]
+  ],
+  "version": "0.1.4"
 }
