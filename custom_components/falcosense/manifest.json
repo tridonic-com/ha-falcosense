@@ -9,10 +9,10 @@
     "@markus-becker-tridonic-com"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/tridonic-com/hacs-falcosense",
+  "documentation": "https://github.com/tridonic-com/ha-falcosense",
   "integration_type": "device",
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/tridonic-com/hacs-falcosense/issues",
+  "issue_tracker": "https://github.com/tridonic-com/ha-falcosense/issues",
   "loggers": [
     "falcosense",
     "aiomqtt"
