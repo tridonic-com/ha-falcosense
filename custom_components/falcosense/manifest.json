@@ -1,6 +1,10 @@
 {
   "domain": "falcosense",
   "name": "FalcoSENSE",
+  "categories": [
+    "presence_location",
+    "hubs_protocols.building_automation"
+  ],
   "codeowners": [
     "@markus-becker-tridonic-com"
   ],
@@ -15,8 +19,7 @@
   ],
   "quality_scale": "platinum",
   "requirements": [
-    "falcosense==0.1.0",
-    "Pillow>=12.3.0"
+    "falcosense==0.1.0"
   ],
   "version": "0.1.4"
 }
