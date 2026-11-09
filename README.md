@@ -2,6 +2,12 @@
 
 # Tridonic FalcoSENSE — HACS test distribution
 
+[![HACS](https://github.com/tridonic-com/ha-falcosense/actions/workflows/hacs.yml/badge.svg)](https://github.com/tridonic-com/ha-falcosense/actions/workflows/hacs.yml)
+[![Hassfest](https://github.com/tridonic-com/ha-falcosense/actions/workflows/hassfest.yml/badge.svg)](https://github.com/tridonic-com/ha-falcosense/actions/workflows/hassfest.yml)
+[![Release](https://img.shields.io/github/v/release/tridonic-com/ha-falcosense?sort=semver)](https://github.com/tridonic-com/ha-falcosense/releases)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/tridonic-com/ha-falcosense#readme)
+[![License](https://img.shields.io/github/license/tridonic-com/ha-falcosense)](LICENSE)
+
 Pre-release distribution of the **Tridonic FalcoSENSE** Home Assistant
 integration for early testers, before it is available in Home Assistant core. It
 integrates the [Tridonic FalcoSENSE](https://www.tridonic.com/de/int/product/32878)
