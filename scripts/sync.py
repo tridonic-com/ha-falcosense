@@ -2,12 +2,9 @@
 """Sync the FalcoSENSE integration from Home Assistant core into this HACS repo.
 
 Copies ``homeassistant/components/falcosense/`` from a local Home Assistant core
-checkout into ``custom_components/falcosense/`` and applies the one manifest
-change a HACS custom integration needs that a core integration must not have:
-add a ``version`` field (required for custom integrations).
-
-The ``falcosense`` library is pinned from PyPI and copied verbatim.
-Everything else is copied verbatim, including the generated
+checkout into ``custom_components/falcosense/`` and rewrites the manifest so it
+passes HACS and hassfest validation as a custom integration (see
+``patch_manifest``). Everything else is copied verbatim, including the generated
 ``translations/en.json`` (HACS has no build step to generate it). Re-run after
 any change in core.
 """
@@ -16,29 +13,72 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DST = REPO_ROOT / "custom_components" / "falcosense"
 
-DEFAULT_VERSION = "0.1.4"
+DEFAULT_VERSION = "0.1.5"
+
+GITHUB_REPO = "tridonic-com/ha-falcosense"
+
+# Packages Home Assistant ships as direct dependencies must not be listed at all
+# by a custom integration.
+DROP_REQUIREMENTS: frozenset[str] = frozenset({"Pillow"})
+# Packages Home Assistant only constrains must be loosened from "==" to ">=" so
+# they follow core instead of pinning against it.
+LOOSEN_REQUIREMENTS: frozenset[str] = frozenset()
+# Categories to add only when core defines none (HACS wants categories).
+DEFAULT_CATEGORIES: list[str] = [
+    "presence_location",
+    "hubs_protocols.building_automation",
+]
 
 EXCLUDE = shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo")
 
 
+def _package_name(requirement: str) -> str:
+    """Return the distribution name from a requirement like ``Pillow==1.0``."""
+    return re.split(r"[=<>!~ ]", requirement, maxsplit=1)[0].strip()
+
+
+def _patch_requirements(requirements: list[str]) -> list[str]:
+    patched: list[str] = []
+    for req in requirements:
+        name = _package_name(req)
+        if name in DROP_REQUIREMENTS:
+            continue
+        if name in LOOSEN_REQUIREMENTS:
+            req = req.replace("==", ">=")
+        patched.append(req)
+    return patched
+
+
 def patch_manifest(path: Path, version: str) -> None:
-    """Add the version field required for a custom integration."""
+    """Rewrite the core manifest into a HACS-custom one.
+
+    Versus the core manifest this:
+    - adds a ``version`` field (required for custom integrations),
+    - points ``documentation``/``issue_tracker`` at this GitHub repo (hassfest
+      rejects the home-assistant.io URL for custom integrations),
+    - drops/loosens requirements Home Assistant itself ships,
+    - adds fallback ``categories`` when core defines none, and
+    - sorts keys as hassfest expects (``domain``, ``name``, then alphabetical).
+    """
     manifest = json.loads(path.read_text(encoding="utf-8"))
 
-    # Place version right after name for readability.
-    ordered: dict[str, object] = {}
-    for key, value in manifest.items():
-        ordered[key] = value
-        if key == "name":
-            ordered["version"] = version
-    if "version" not in ordered:
-        ordered["version"] = version
+    manifest["version"] = version
+    manifest["documentation"] = f"https://github.com/{GITHUB_REPO}"
+    manifest["issue_tracker"] = f"https://github.com/{GITHUB_REPO}/issues"
+    if "requirements" in manifest:
+        manifest["requirements"] = _patch_requirements(manifest["requirements"])
+    if DEFAULT_CATEGORIES and not manifest.get("categories"):
+        manifest["categories"] = DEFAULT_CATEGORIES
+
+    rest = sorted(key for key in manifest if key not in ("domain", "name"))
+    ordered = {key: manifest[key] for key in ("domain", "name", *rest)}
 
     path.write_text(
         json.dumps(ordered, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
