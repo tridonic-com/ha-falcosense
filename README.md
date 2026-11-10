@@ -1,4 +1,4 @@
-<img src="icon.png" alt="Tridonic FalcoSENSE" width="128" align="right" />
+<img src="https://raw.githubusercontent.com/tridonic-com/ha-falcosense/main/icon.png" alt="Tridonic FalcoSENSE" width="128" align="right" />
 
 # Tridonic FalcoSENSE
 
