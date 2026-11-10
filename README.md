@@ -18,32 +18,35 @@ people-counting / occupancy sensor over its local REST and MQTT APIs.
 
 ## Requirements
 
-- A running Home Assistant instance (OS, Container, or Supervised recommended;
-  these ship `git`, which is needed to install the `falcosense` dependency).
+- A running Home Assistant instance (OS, Container, or Supervised recommended).
 - [HACS](https://hacs.xyz) installed.
 - Network access on the Home Assistant host (first setup installs the
-  `falcosense` library from GitHub via pip).
+  `falcosense` library from PyPI via pip).
 - A commissioned FalcoSENSE sensor on your network with the MQTT endpoint enabled
   and an API token generated in its dashboard.
 
 ## Install
 
-1. Add the repository to HACS, either with the button below or manually via
-   **HACS → Integrations → three-dot menu → Custom repositories** (add this
-   repository's URL with category **Integration**):
+This integration is in the HACS default store.
 
-   [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tridonic-com&repository=ha-falcosense&category=integration)
-2. Find **Tridonic FalcoSENSE** in HACS, install it, then **restart Home
+1. In HACS, search for **Tridonic FalcoSENSE**, install it, then **restart Home
    Assistant**.
-3. Go to **Settings → Devices & Services → Add integration**, search for
+2. Go to **Settings → Devices & Services → Add integration**, search for
    **FalcoSENSE** (under the Tridonic brand), and enter the sensor's host and
    API token.
+
+If it does not appear yet, add it as a custom repository as a fallback — open
+**HACS → Integrations → three-dot menu → Custom repositories**, add this
+repository's URL with category **Integration** (or use the button below), then
+install as above:
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tridonic-com&repository=ha-falcosense&category=integration)
 
 ## How this repo is maintained
 
 The integration here is a copy of the core integration, kept in sync with
 [`scripts/sync.py`](scripts/sync.py), which copies
 `homeassistant/components/falcosense/` from a local Home Assistant core checkout
-and applies the two changes a HACS custom integration needs: a `version` field
-and a git-URL requirement for the `falcosense` library. Re-run it after any
+and adds the one change a HACS custom integration needs: a `version` field. The
+`falcosense` library is pinned from PyPI and copied verbatim. Re-run it after any
 change in core and cut a matching release tag.
